@@ -1,0 +1,35 @@
+﻿<Window x:Class="WpfMusicalSwingPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfMusicalSwingPlayer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <WrapPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <Label>COM Port:</Label>
+                <ComboBox Name="ComPorts"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label>Instrument:</Label>
+                <ComboBox Name="Instruments"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label>Channel:</Label>
+                <ComboBox Name="Channels"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="b" Click="B_OnClick">Connect</Button>
+            </StackPanel>
+        </WrapPanel>
+        <StackPanel Orientation="Vertical">
+        <DataGrid Name="Swings">
+            <DataGrid.Columns>
+                
+            </DataGrid.Columns>
+        </DataGrid>
+            </StackPanel>
+    </StackPanel>
+</Window>
