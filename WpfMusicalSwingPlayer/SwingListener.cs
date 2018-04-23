@@ -18,7 +18,7 @@ namespace WpfMusicalSwingPlayer
         private readonly string _comm;
         private readonly OutputDevice _device;
         private readonly Channel _channel;
-        private readonly Instrument _instrument;
+        private  Instrument _instrument;
         private SerialPort _port;
         //private StreamWriter _sampleFile;
         private float _pitchValue;
@@ -57,6 +57,13 @@ namespace WpfMusicalSwingPlayer
         public string Instrument
         {
             get { return _instrument.ToString(); }
+            set
+            {
+                var inst = (Instrument)Enum.Parse(typeof(Instrument), value);
+                _instrument = inst;
+                _device.SendProgramChange(_channel, _instrument);
+                OnPropertyChanged();
+            }
         }
 
         public int First
@@ -193,6 +200,13 @@ namespace WpfMusicalSwingPlayer
             return @event;
         }
 
+        public ObservableCollection<String> Instruments
+        {
+            get
+            {
+                return new ObservableCollection<string>(Enum.GetValues(typeof(Instrument)).Cast<Instrument>().Select(c => c.ToString()));
+            }
+        }
 
         public float Lowest
         {

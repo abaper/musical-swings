@@ -27,8 +27,17 @@
         <StackPanel Orientation="Vertical">
         <DataGrid Name="Swings">
             <DataGrid.Columns>
-                
-            </DataGrid.Columns>
+                <DataGridTemplateColumn Header="owner (as combobox)" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox
+                                ItemsSource="{Binding Path=Instruments}"
+                                SelectedItem="{Binding Instrument, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                </DataGrid.Columns>
         </DataGrid>
             </StackPanel>
     </StackPanel>
