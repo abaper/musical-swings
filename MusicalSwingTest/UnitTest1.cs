@@ -21,7 +21,7 @@ namespace MusicalSwingTest
                     if (string.IsNullOrEmpty(line))
                         break;
                     var eventObject = JsonConvert.DeserializeObject<SwingEvent>(line);
-                    var mapper = new NoteMappnig(eventObject,new List<int>() { 5, 10 });
+                    var mapper = new NoteMappnig(eventObject,new List<int>() { 5, 10} ,1,1);
                     if (mapper.IsPlayable)
                     {
                         Console.WriteLine(mapper.GetNote());

@@ -7,10 +7,11 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Midi;
 using Newtonsoft.Json;
 using WpfMusicalSwingPlayer.Annotations;
-
+using System.Timers;
 namespace WpfMusicalSwingPlayer
 {
     public class SwingListener:INotifyPropertyChanged
@@ -33,8 +34,16 @@ namespace WpfMusicalSwingPlayer
         private float _highest;
         private int _velocity=80;
 
+        private System.Timers.Timer _timer;
+        private int _octave;
+        private float _basePitch;
+
         public SwingListener(string comm,OutputDevice device,Channel channel,Instrument instrument)
         {
+            _octave = 4;
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += _timer_Elapsed;
+            _timer.Start();
             _comm = comm;
             _device = device;
             _channel = channel;
@@ -47,6 +56,11 @@ namespace WpfMusicalSwingPlayer
             Ranges.Add(Pitch.E4, new MappingRange() { Low = 10, High = 20 });
             Ranges.Add(Pitch.F4, new MappingRange() { Low = 30, High = 40 });
 
+        }
+
+        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            PortOnDataReceived(null, null);
         }
 
         public string Channel
@@ -87,6 +101,16 @@ namespace WpfMusicalSwingPlayer
             }
         }
 
+
+        public float BasePitch
+        {
+            get { return _basePitch; }
+            set
+            {
+                _basePitch = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int Third
         {
@@ -135,7 +159,7 @@ namespace WpfMusicalSwingPlayer
 
         private void InitComm()
         {
-            _port = new SerialPort(_comm, 115200);
+            /*_port = new SerialPort(_comm, 115200);
             _port.Parity = Parity.None;
             _port.DataBits = 8;
             _port.StopBits = StopBits.One;
@@ -143,14 +167,26 @@ namespace WpfMusicalSwingPlayer
             _port.RtsEnable = true;
             _port.DtrEnable = true;
             _port.DataReceived += PortOnDataReceived;
-            _port.Open();
+            _port.Open();*/
+
         }
 
         private void PortOnDataReceived(object sender, SerialDataReceivedEventArgs serialDataReceivedEventArgs)
         {
             try
             {
-                var @event = GetEvent(sender);
+                SerialPort port = sender as SerialPort;
+                string line = "";
+                if (port != null)
+                {
+                    line = port.ReadLine();
+                }
+                else
+                {
+                    line = @"{""roll"":25.976805,""pitch"":32.529636,""heading"":172.140381,""gx"":48.187256,""gy"":-39.489746,""gz"":155.052185}";
+                }
+                
+                var @event = GetEvent(line);
                 var note = PlayNote(@event);
                 AccountValues(@event, note);
             }
@@ -183,18 +219,27 @@ namespace WpfMusicalSwingPlayer
             }
         }
 
+        public int Octave
+        {
+            get { return _octave; }
+            set
+            {
+                _octave = value;
+                OnPropertyChanged();
+            }
+        }
+
         private Pitch PlayNote(SwingEvent @event)
         {
-            var noteMapper = new NoteMappnig(@event, IntRanges.ToList());
+            var noteMapper = new NoteMappnig(@event, IntRanges.ToList(),Octave,BasePitch);
             var note = noteMapper.GetNote();
             _device.SendNoteOn(_channel, note, _velocity);
             return note;
         }
 
-        private static SwingEvent GetEvent(object sender)
+        private static SwingEvent GetEvent(string line)
         {
-            SerialPort port = (SerialPort) sender;
-            string line = port.ReadLine();
+            
             Trace.WriteLine(line);
             var @event = JsonConvert.DeserializeObject<SwingEvent>(line);
             return @event;
