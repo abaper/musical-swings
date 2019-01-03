@@ -63,6 +63,7 @@
     <Compile Include="MappingRange.cs" />
     <Compile Include="NoteMappnig.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="SwingMovement.cs" />
     <Compile Include="SwingEvent.cs" />
     <Compile Include="SwingListener.cs" />
     <Page Include="MainWindow.xaml">

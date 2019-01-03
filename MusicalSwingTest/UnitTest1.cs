@@ -35,5 +35,35 @@ namespace MusicalSwingTest
             }
           //  var mapping = new NoteMappnig()
         }
+        [TestMethod]
+        public void should_play_sound_when_swings()
+        {
+            var detect = new SwingDetector(5);
+            detect.AddPosition(1);
+            detect.AddPosition(2);
+            detect.AddPosition(3);
+            detect.AddPosition(4);
+            detect.AddPosition(5);
+            detect.AddPosition(6);
+            detect.AddPosition(5);
+            Assert.AreEqual(MovingDir.Left,detect.Dir);
+            detect.AddPosition(4);
+            detect.AddPosition(3);
+            detect.AddPosition(2);
+            detect.AddPosition(1);
+            detect.AddPosition(2);
+            Assert.AreEqual(MovingDir.Right, detect.Dir);
+            detect.AddPosition(3);
+            detect.AddPosition(3);
+            detect.AddPosition(3);
+            detect.AddPosition(3);
+            detect.AddPosition(3);
+            detect.AddPosition(3);
+            detect.AddPosition(4);
+            detect.AddPosition(5);
+            detect.AddPosition(4);
+            detect.AddPosition(3);
+            Assert.AreEqual(MovingDir.Left, detect.Dir);
+        }
     }
 }
