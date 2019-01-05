@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midi", "Midi\Midi.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiUnitTests", "MidiUnitTests\MidiUnitTests.csproj", "{EFE2A922-4927-4D76-ADC6-983D44B2FD4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicalSwingPlayer", "MusicalSwingPlayer\MusicalSwingPlayer.csproj", "{2DA7EBD7-4123-474B-9884-4146C7EF0ED5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfMusicalSwingPlayer", "WpfMusicalSwingPlayer\WpfMusicalSwingPlayer.csproj", "{9D09D2D2-882D-4BD9-9028-934B48E83AAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicalSwingTest", "MusicalSwingTest\MusicalSwingTest.csproj", "{FD9E567C-226B-49DC-BFF3-E7B0F2125BC2}"
@@ -32,10 +30,6 @@ Global
 		{EFE2A922-4927-4D76-ADC6-983D44B2FD4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE2A922-4927-4D76-ADC6-983D44B2FD4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE2A922-4927-4D76-ADC6-983D44B2FD4E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2DA7EBD7-4123-474B-9884-4146C7EF0ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DA7EBD7-4123-474B-9884-4146C7EF0ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DA7EBD7-4123-474B-9884-4146C7EF0ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DA7EBD7-4123-474B-9884-4146C7EF0ED5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9D09D2D2-882D-4BD9-9028-934B48E83AAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9D09D2D2-882D-4BD9-9028-934B48E83AAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D09D2D2-882D-4BD9-9028-934B48E83AAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
