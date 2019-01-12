@@ -1,7 +1,11 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
-
+using Midi;
+/// <summary>
+/// http://bluelemonlabs.blogspot.com/2013/08/arduino-imu-pitch-roll-from-adxl345.html
+/// </summary>
 namespace WpfMusicalSwingPlayer
 {
     public enum MovingDir
@@ -11,15 +15,51 @@ namespace WpfMusicalSwingPlayer
         None
     }
 
-    public interface ISoundGenerator
-    {
-        void PlaySound(int swingId, int value, MovingDir dir);
-    }
-    public class SoundGenerator: ISoundGenerator
-    {
-        public void PlaySound(int swingId,int value, MovingDir dir)
-        {
+    
 
+    public interface IPlayingDevice
+    {
+        void PlayNote(Pitch note);
+    }
+
+    public interface INoteMapper
+    {
+        void Map(int swingId, int value, MovingDir dir);
+    }
+
+    public class NoteMapper: INoteMapper
+    {
+        private readonly int _zero;
+        private readonly IPlayingDevice _playingDevice;
+        private readonly int[] _ranges = new[] {330,400,550,600};
+
+        readonly Dictionary<int,Midi.Pitch> _notes = new Dictionary<int, Pitch>()
+        {
+            {85, Pitch.C0},
+            {70, Pitch.D0},
+            {50, Pitch.E0},
+            {30, Pitch.F0}
+        };
+        public NoteMapper(int zero, IPlayingDevice playingDevice)
+        {
+            _zero = zero;
+            _playingDevice = playingDevice;
+        }
+        public void Map(int swingId,int value, MovingDir dir)
+        {
+            if (value < _notes.Keys.First())
+            {
+                return;
+            }
+            var last = 0;
+            foreach (var range in _notes.Keys)
+            {
+                if (value >= last && value <= range)
+                {
+                    _playingDevice.PlayNote(_notes[range]);
+                }
+                last = range;
+            }
         }
     }
 
@@ -27,17 +67,17 @@ namespace WpfMusicalSwingPlayer
     public class SwingDispatch
     {
         private readonly int[] _ids;
-        private readonly ISoundGenerator _generator;
-        private Dictionary<int,SwingDetector> _swings=new Dictionary<int, SwingDetector>();
+        private readonly INoteMapper _generator;
+        private readonly Dictionary<int,SwingDetector> _swingDetectors=new Dictionary<int, SwingDetector>();
         private const int Step = 5;
-        
-        public SwingDispatch(int[] ids, ISoundGenerator generator)
+        private const int Sensors = 1;
+        public SwingDispatch(int[] ids, INoteMapper generator)
         {
             _ids = ids;
             _generator = generator;
             foreach (var id in ids)
             {
-                _swings[id]=new SwingDetector(id, Step);
+                _swingDetectors[id]=new SwingDetector(id, Step);
             }
         }
 
@@ -53,11 +93,11 @@ namespace WpfMusicalSwingPlayer
             {
                 var swingId = int.Parse(posArray[i]);
                 var position = int.Parse(posArray[i+1]);
-                var swing = _swings[swingId];
+                var swing = _swingDetectors[swingId];
                 swing.AddPosition(position);
                 if (swing.Dir != MovingDir.None)
                 {
-                    _generator.PlaySound(swingId,swing.Value,swing.Dir);
+                    _generator.Map(swingId,swing.Value,swing.Dir);
                 }
             }
         }
@@ -108,12 +148,12 @@ namespace WpfMusicalSwingPlayer
                 _dir = MovingDir.None;
                 return;
             }
-            var pos = FindPeak(_positions.ToArray(), _positions.Count);
+          /*  var pos = FindPeak(_positions.ToArray(), _positions.Count);
             if (!(pos == 0 || pos == _positions.Count - 1) && !IsFlat(_positions))
             {
                 _positions.Clear();
                 return;
-            }
+            }*/
             var low = FindLow(_positions.ToArray(), _positions.Count );
             if (!(low == 0 || low == _positions.Count - 1) && !IsFlat(_positions))
             {
