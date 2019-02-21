@@ -6,7 +6,16 @@
         xmlns:local="clr-namespace:WpfMusicalSwingPlayer"
         mc:Ignorable="d"
         Title="Swings" Height="850" Width="800">
-    <Grid Margin="10">
+    <StackPanel>
+        <WrapPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <Label>COM Port:</Label>
+                <ComboBox Name="ComPorts"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="Connect" Click="Connect_OnClick">Connect</Button>
+            </StackPanel>
+        </WrapPanel>
         <ItemsControl Name="SwingList">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -29,5 +38,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Grid>
+    </StackPanel>
 </Window>

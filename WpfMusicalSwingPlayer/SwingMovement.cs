@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Midi;
 /// <summary>
 /// http://bluelemonlabs.blogspot.com/2013/08/arduino-imu-pitch-roll-from-adxl345.html
@@ -15,12 +16,6 @@ namespace WpfMusicalSwingPlayer
         None
     }
 
-    
-
-    public interface IPlayingDevice
-    {
-        void PlayNote(Pitch note);
-    }
 
     public interface INoteMapper
     {
@@ -47,7 +42,7 @@ namespace WpfMusicalSwingPlayer
         }
         public void Map(int swingId,int value, MovingDir dir)
         {
-            if (value < _notes.Keys.First())
+            if (value > _notes.Keys.First())
             {
                 return;
             }
@@ -62,7 +57,6 @@ namespace WpfMusicalSwingPlayer
             }
         }
     }
-
 
     public class SwingDispatch
     {
@@ -86,7 +80,9 @@ namespace WpfMusicalSwingPlayer
             var posArray = positions.Split(',');
             if (posArray.Length != _ids.Length * 2)
             {
-                throw new InvalidOperationException($"{positions} is invalid. You can only send array of {_ids.Length * 2} integers");
+                return;
+                //ReturnValueNameAttribute;
+                //throw new InvalidOperationException($"{positions} is invalid. You can only send array of {_ids.Length * 2} integers");
             }
 
             for (int i = 0; i < 12; i+=2)

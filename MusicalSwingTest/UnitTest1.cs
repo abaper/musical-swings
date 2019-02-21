@@ -21,11 +21,11 @@ namespace MusicalSwingTest
             playingDevice.Verify(c => c.PlayNote(Midi.Pitch.C0));
         }
         [TestMethod]
-        public void should_play_nothing_below_85()
+        public void should_play_nothing_above_85()
         {
             var playingDevice = new Mock<IPlayingDevice>();
             var mapper = new NoteMapper(90, playingDevice.Object);
-            mapper.Map(0, 80, MovingDir.Left);
+            mapper.Map(0, 90, MovingDir.Left);
             playingDevice.Verify(c => c.PlayNote(Midi.Pitch.C0),Times.Never);
         }
 
@@ -73,6 +73,12 @@ namespace MusicalSwingTest
             swingGenerator.Verify(c=>c.Map(1, 40, It.IsAny<MovingDir>()),Times.Once);
             swingGenerator.Verify(c => c.Map(1, 39, It.IsAny<MovingDir>()), Times.Once);
             swingGenerator.Verify(c => c.Map(6, 111, It.IsAny<MovingDir>()), Times.Once);
+        }
+
+
+        public void should_connect_to_comm()
+        {
+
         }
     
 }

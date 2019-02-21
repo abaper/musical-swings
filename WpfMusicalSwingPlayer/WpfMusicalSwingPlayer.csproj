@@ -60,6 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ArduinoConnector.cs" />
+    <Compile Include="IPlayingDevice.cs" />
     <Compile Include="MappingRange.cs" />
     <Compile Include="NoteMappnig.cs" />
     <Compile Include="Properties\Annotations.cs" />
